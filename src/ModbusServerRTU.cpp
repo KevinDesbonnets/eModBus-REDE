@@ -13,21 +13,25 @@
 uint8_t ModbusServerRTU::instanceCounter = 0;
 
 // Constructor with RTS pin GPIO (or -1)
-ModbusServerRTU::ModbusServerRTU(HardwareSerial& serial, uint32_t timeout, int rtsPin) :
+ModbusServerRTU::ModbusServerRTU(HardwareSerial& serial, uint32_t timeout, int rtsPin, int rtsPin2) :
   ModbusServer(),
   serverTask(nullptr),
   serverTimeout(20000),
   MSRserial(serial),
   MSRinterval(2000),     // will be calculated in start()!
   MSRlastMicros(0),
-  MSRrtsPin(rtsPin) {
+  MSRrtsPin(rtsPin),
+  MSRrtsPin2(rtsPin2) {
   // Count instances one up
   instanceCounter++;
   // If we have a GPIO RE/DE pin, configure it.
   if (MSRrtsPin >= 0) {
     pinMode(MSRrtsPin, OUTPUT);
+    pinMode(MSRrtsPin2, OUTPUT);
     MRTSrts = [this](bool level) {
       digitalWrite(MSRrtsPin, level);
+      
+      digitalWrite(MSRrtsPin2, level);
     };
     MRTSrts(LOW);
   } else {
@@ -50,6 +54,7 @@ ModbusServerRTU::ModbusServerRTU(HardwareSerial& serial, uint32_t timeout, RTSca
   instanceCounter++;
   // Configure RTS callback
   MSRrtsPin = -1;
+  MSRrtsPin2 = -1;
   MRTSrts(LOW);
   // Set the UART FIFO copy threshold to 1 byte
   RTUutils::UARTinit(serial, 1);

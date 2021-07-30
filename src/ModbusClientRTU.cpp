@@ -11,18 +11,21 @@
 #include "Logging.h"
 
 // Constructor takes Serial reference and optional DE/RE pin
-ModbusClientRTU::ModbusClientRTU(HardwareSerial& serial, int8_t rtsPin, uint16_t queueLimit) :
+ModbusClientRTU::ModbusClientRTU(HardwareSerial& serial, int8_t rtsPin, int8_t rtsPin2, uint16_t queueLimit) :
   ModbusClient(),
   MR_serial(serial),
   MR_lastMicros(micros()),
   MR_interval(2000),
   MR_rtsPin(rtsPin),
+  MR_rtsPin2(rtsPin2),
   MR_qLimit(queueLimit),
   MR_timeoutValue(DEFAULTTIMEOUT) {
     if (MR_rtsPin >= 0) {
       pinMode(MR_rtsPin, OUTPUT);
+      pinMode(MR_rtsPin2, OUTPUT);
       MTRSrts = [this](bool level) {
         digitalWrite(MR_rtsPin, level);
+        digitalWrite(MR_rtsPin2, level);
       };
       MTRSrts(LOW);
     } else {
@@ -42,6 +45,7 @@ ModbusClientRTU::ModbusClientRTU(HardwareSerial& serial, RTScallback rts, uint16
   MR_qLimit(queueLimit),
   MR_timeoutValue(DEFAULTTIMEOUT) {
     MR_rtsPin = -1;
+    MR_rtsPin2 = -1;
     MTRSrts(LOW);
     // Switch serial FIFO buffer copy threshold to 1 byte (normally is 112!)
     RTUutils::UARTinit(serial, 1);

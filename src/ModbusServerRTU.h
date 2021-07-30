@@ -22,7 +22,7 @@ extern "C" {
 class ModbusServerRTU : public ModbusServer {
 public:
   // Constructors
-  ModbusServerRTU(HardwareSerial& serial, uint32_t timeout, int rtsPin = -1);
+  ModbusServerRTU(HardwareSerial& serial, uint32_t timeout, int rtsPin = -1, int rtsPin2 = -1);
   ModbusServerRTU(HardwareSerial& serial, uint32_t timeout, RTScallback rts);
 
   // Destructor
@@ -52,6 +52,7 @@ protected:
   uint32_t MSRinterval;                  // Bus quiet time between messages
   uint32_t MSRlastMicros;                // microsecond time stamp of last bus activity
   int8_t MSRrtsPin;                      // GPIO number of the RS485 module's RE/DE line
+  int8_t MSRrtsPin2;                      // GPIO number of the RS485 module's RE/DE line
   RTScallback MRTSrts;                   // Callback to set the RTS line to HIGH/LOW
 
   // serve: loop function for server task

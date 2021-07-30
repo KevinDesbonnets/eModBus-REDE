@@ -22,7 +22,7 @@ using std::queue;
 class ModbusClientRTU : public ModbusClient {
 public:
   // Constructor takes Serial reference and optional DE/RE pin and queue limit
-  explicit ModbusClientRTU(HardwareSerial& serial, int8_t rtsPin = -1, uint16_t queueLimit = 100);
+  explicit ModbusClientRTU(HardwareSerial& serial, int8_t rtsPin = -1, int8_t rtsPin2 = -1, uint16_t queueLimit = 100);
 
   // Alternative Constructor takes Serial reference and RTS line toggle callback
   explicit ModbusClientRTU(HardwareSerial& serial, RTScallback rts, uint16_t queueLimit = 100);
@@ -72,6 +72,7 @@ protected:
   uint32_t MR_lastMicros;         // Microseconds since last bus activity
   uint32_t MR_interval;           // Modbus RTU bus quiet time
   int8_t MR_rtsPin;               // GPIO pin to toggle RS485 DE/RE line. -1 if none.
+  int8_t MR_rtsPin2;              // GPIO pin to toggle RS485 DE/RE line. -1 if none.
   RTScallback MTRSrts;            // RTS line callback function
   uint16_t MR_qLimit;             // Maximum number of requests to hold in the queue
   uint32_t MR_timeoutValue;       // Interface default timeout

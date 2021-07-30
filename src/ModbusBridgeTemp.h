@@ -29,7 +29,7 @@ public:
   ModbusBridge();
 
   // Constructors for the RTU variant. Parameters as are for ModbusServerRTU
-  ModbusBridge(HardwareSerial& serial, uint32_t timeout, int rtsPin = -1);
+  ModbusBridge(HardwareSerial& serial, uint32_t timeout, int rtsPin = -1, int rtsPin2 = -1);
   ModbusBridge(HardwareSerial& serial, uint32_t timeout, RTScallback rts);
 
   // Destructor
@@ -85,8 +85,8 @@ ModbusBridge<SERVERCLASS>::ModbusBridge() :
 
 // Constructors for RTU variant
 template<typename SERVERCLASS>
-ModbusBridge<SERVERCLASS>::ModbusBridge(HardwareSerial& serial, uint32_t timeout, int rtsPin) :
-  SERVERCLASS(serial, timeout, rtsPin) { }
+ModbusBridge<SERVERCLASS>::ModbusBridge(HardwareSerial& serial, uint32_t timeout, int rtsPin, int rtsPin2) :
+  SERVERCLASS(serial, timeout, rtsPin, rtsPin2) { }
 
 // Alternate constructors for RTU variant
 template<typename SERVERCLASS>
